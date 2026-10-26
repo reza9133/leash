@@ -1,0 +1,9 @@
+.env
+.leash-address
+node_modules/
+__pycache__/
+.pytest_cache/
+*.pyc
+reports/*
+!reports/.gitkeep
+.rehearsal-tmp/
