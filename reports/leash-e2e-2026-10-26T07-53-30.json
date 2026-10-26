@@ -1,0 +1,2727 @@
+{
+  "title": "Leash live test on Studionet",
+  "network": "studionet",
+  "rpc": "https://studio.genlayer.com/api",
+  "contract": "0x13Ad9bC5C0a1fcC19f5C410b6685EB6029893CB5",
+  "startedAt": "2026-10-26T07:53:30.316Z",
+  "finishedAt": "2026-10-26T08:25:37.786Z",
+  "finished": true,
+  "accounts": {
+    "owner": "0x31AB7788028C216BFa665546a834D93668E2D533",
+    "agent": "0x236116FE5A95491e32860c12860bF74c02659303",
+    "guardian": "0x17505A92Da917f089dB324cadE5453744c4A8E80",
+    "outsider": "0x0C47D75ECa97d5BD53f4Dd4344b7aCC91c9B6324",
+    "watcher": "0x4bfA196bfd59D9d4d098cF92191FF49C24053b68"
+  },
+  "inputs": {
+    "scenarios": [
+      "basics",
+      "adversarial",
+      "expiry",
+      "review",
+      "veto",
+      "challenge",
+      "limits"
+    ],
+    "evidence": "https://www.iana.org/help/example-domains",
+    "deposit": "30000000000000000",
+    "perPayment": "10000000000000000",
+    "amount": "2000000000000000"
+  },
+  "statsBefore": {
+    "mandates": 0,
+    "requests": 0,
+    "executed": 0,
+    "rejected": 0,
+    "vetoed": 0,
+    "challenges_upheld": 0,
+    "challenges_dismissed": 0,
+    "reviews": 0,
+    "volume": "0",
+    "deposited": "0",
+    "paid": "0",
+    "bonds": "0"
+  },
+  "statsAfter": {
+    "mandates": 8,
+    "requests": 11,
+    "executed": 4,
+    "rejected": 2,
+    "vetoed": 1,
+    "challenges_upheld": 0,
+    "challenges_dismissed": 1,
+    "reviews": 8,
+    "volume": "16000000000000000",
+    "deposited": "206000000000000000",
+    "paid": "206000000000000000",
+    "bonds": "0"
+  },
+  "verdicts": [
+    {
+      "scenario": "adversarial",
+      "stage": "steering purpose",
+      "verdict": "REJECT",
+      "risk": 100,
+      "flags": [
+        "injection"
+      ],
+      "reason": "The purpose text tries to steer the reviewer."
+    },
+    {
+      "scenario": "review",
+      "stage": "review",
+      "verdict": "REJECT",
+      "risk": 99,
+      "flags": [
+        "no_evidence",
+        "off_policy"
+      ],
+      "reason": "Purpose explicitly states casino chips and a raffle giveaway, both strictly prohibited by policy."
+    },
+    {
+      "scenario": "review",
+      "stage": "review",
+      "verdict": "APPROVE",
+      "risk": 12,
+      "flags": [],
+      "reason": "Payment is within limit and evidence confirms IANA page explaining reserved example domains, matching the policy's documentation allowance."
+    },
+    {
+      "scenario": "veto",
+      "stage": "review",
+      "verdict": "ESCALATE",
+      "risk": 40,
+      "flags": [
+        "payee_unknown"
+      ],
+      "reason": "Purpose and evidence match allowed documentation, but the payee is unverified; a human should confirm before payment."
+    },
+    {
+      "scenario": "challenge",
+      "stage": "review",
+      "verdict": "APPROVE",
+      "risk": 12,
+      "flags": [],
+      "reason": "Request matches policy: paying for reference documentation about reserved example domains, amount is within limit."
+    },
+    {
+      "scenario": "challenge",
+      "stage": "audit",
+      "verdict": "APPROVE",
+      "risk": 0,
+      "flags": [],
+      "reason": "Purpose and evidence match policy for example domain reference documentation."
+    },
+    {
+      "scenario": "limits",
+      "stage": "review",
+      "verdict": "ESCALATE",
+      "risk": 55,
+      "flags": [
+        "no_evidence",
+        "payee_unknown"
+      ],
+      "reason": "Purpose fits policy but no evidence links the payee to a legitimate documentation service for reserved example domains."
+    },
+    {
+      "scenario": "limits",
+      "stage": "review",
+      "verdict": "ESCALATE",
+      "risk": 40,
+      "flags": [
+        "no_evidence"
+      ],
+      "reason": "The request appears to align with the policy, but no evidence was provided to verify the nature of the documentation or the legitimacy of the payee."
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "basics",
+      "note": "open a mandate, configure it, fund it, pause it and take money out",
+      "status": "passed",
+      "steps": [
+        {
+          "label": "create_mandate",
+          "fn": "create_mandate",
+          "caller": "owner",
+          "value": "30000000000000000",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x0ae88426baa56ea9ec6d03fe97ee03ca034a854a2b73ac6777a5611b5064d989",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "set_rules",
+          "fn": "set_rules",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x905ae9977f6a28adc372149ea0a5ed7141b7d67a956e9f3159e26c4e97b87fb5",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "set_policy",
+          "fn": "set_policy",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x20d6b04013a43cc04f36e3b6de603e5c8f2909f1da3155a64b91598b6432bc09",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "grant_delegate",
+          "fn": "grant_delegate",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x0d8539f04b74ba6092d296b45896342a0a9d1965321b5c145e90d0f13930d37b",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "add_payee",
+          "fn": "add_payee",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x153ecd472ac3f0974e32a9c8276e2cc9380b3fac93b7cc1458bb386a664b21c2",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "add_payee (second)",
+          "fn": "add_payee",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x97f1ad99c82d8ab3badfd78298e696be936ffc2602f82813a29e6f72e79c1a14",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "remove_payee",
+          "fn": "remove_payee",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x294b1366938cdff81cd808f71561f73ba490eb4eb89faab03e44c4e1189849b9",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "fund (by the agent)",
+          "fn": "fund",
+          "caller": "agent",
+          "value": "5000000000000000",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x6ce311e273ce9591e7c09c2cd1118f5f0ee50c4e3418c7e0e7f06dd4b12fd057",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "set_paused (guardian)",
+          "fn": "set_paused",
+          "caller": "guardian",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xa082f45c52e45f732ec03d323c2abdef7ba15279f5f6c96c07ab2f2cea0a8ece",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "resume by the guardian",
+          "fn": "set_paused",
+          "caller": "guardian",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x2a326c49dd747ea62f1d3829f1d7acb54c7185cc64b477f3b948129c27ee77e6",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a request in a paused mandate",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xee947e16d01f23d108a0a966dbbfd172c69deb0a97221db4d35b9e50ef5cafe8",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "set_paused (owner resumes)",
+          "fn": "set_paused",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xefde4967247ec881d07eb8ec531246606e2d94b3854f61d3de40d22d6ef9756a",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "withdraw",
+          "fn": "withdraw",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x9db0922bd633bcbcc6ea6bc967dc408eb71dab59103ad9cb77fc06a8b4fb60b3",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "withdraw the leftovers",
+          "fn": "withdraw",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x33b430f999f9fca5fd8d6be77e71b4c876219e52150605b176070a80201c059e",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        }
+      ],
+      "checks": [
+        {
+          "name": "create_mandate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the new mandate is the newest one of the owner",
+          "ok": true,
+          "detail": "id 0, mandates before 0"
+        },
+        {
+          "name": "the owner and the guardian are stored",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "the deposit is the balance",
+          "ok": true,
+          "detail": "0.03 GEN"
+        },
+        {
+          "name": "the defaults are in place",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "the books balance after opening",
+          "ok": true,
+          "detail": "deposited 0.03 GEN, paid 0 GEN, held 0.03 GEN, bonds 0 GEN"
+        },
+        {
+          "name": "set_rules succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the rules are updated",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "set_policy succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the policy revision went up",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "grant_delegate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "add_payee succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "add_payee (second) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the seat and the payees are listed",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "remove_payee succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the payee was removed",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "fund (by the agent) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "anyone can add funds",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "set_paused (guardian) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the guardian can pause",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "resume by the guardian is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "resume by the guardian changed no totals",
+          "ok": true,
+          "detail": "35000000000000000/0/0/0/0"
+        },
+        {
+          "name": "a request in a paused mandate is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a request in a paused mandate changed no totals",
+          "ok": true,
+          "detail": "35000000000000000/0/0/0/0"
+        },
+        {
+          "name": "set_paused (owner resumes) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the owner can resume",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "withdraw succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the withdrawal is booked",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "the allowance view reflects the seat",
+          "ok": true,
+          "detail": "{\"seat\":true,\"usable\":true,\"per_payment\":\"10000000000000000\",\"seat_left\":\"20000000000000000\",\"unreserved\":\"30000000000000000\",\"window_left\":\"30000000000000000\",\"open_slots\":3,\"max_request\":\"10000000000000000\"}"
+        },
+        {
+          "name": "the mandate is listed",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "the guardian sees the mandate",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "the books balance at the end",
+          "ok": true,
+          "detail": "deposited 0.035 GEN, paid 0.005 GEN, held 0.03 GEN, bonds 0 GEN"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "name": "adversarial",
+      "note": "calls that must be refused, and text that tries to steer the reviewer",
+      "status": "passed",
+      "steps": [
+        {
+          "label": "create_mandate",
+          "fn": "create_mandate",
+          "caller": "owner",
+          "value": "20000000000000000",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xd3b0f07d6c19dca5486c579bf0edd3779b7042bf5ca844fa5c2bd18e6342b219",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "grant_delegate",
+          "fn": "grant_delegate",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xf64f289f5f76563ad947bfbc25f1b8ee7f01fdd24b91bd8d05c8a57a797dc528",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "a normal request (for the refusals below)",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x4ca692732d3c21578865987389ae6e01047f0891ddbe02292ab1f82630aca0c7",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "a request from someone without a seat",
+          "fn": "request_payment",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x3ea93f8496710cbdea9655781f4851ce66cec8f9d126f59085c8e893d5ff8f0b",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a request above the per-payment limit",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x1d48853fb4e718931a4e3df303e954f362f3939b20a02cd8b9527418dd1b1663",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a request below the minimum",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xf42a3a0c32df7ddf2b958190ca4708e36ebe2865ffaed248028f570245ac84ac",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "the agent paying itself",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x26874f100ecf25c80c6349168771785dae44fcf62eaf293a38dc5ceb064da937",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a purpose that is too short",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x1a4d3e35d64851449100efedb95042ba70dc58dd8ba3c06b855946f6f63184d2",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "evidence on a private address",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x1703798952547918609e9097238ea5b406a222e3d96c8863761b42b0875c8aca",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "evidence with credentials",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x2f1067cbd44967797fea097c473ec1b7c6410156b03e908ca496028b0e3d83bb",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "the same evidence under another spelling",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x45ab172092fe2706b037b68dedcf84f37b1a71a330c1a1f99c4c7664f881504b",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "the agent changing the rules",
+          "fn": "set_rules",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x27c37561ee0b030498f566656eba5873f0fcf9b87cd141cc3676bc5a6c897da8",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "the guardian changing the policy",
+          "fn": "set_policy",
+          "caller": "guardian",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x91105c3d26629e52e303ce188c822ea6aba1f5e7395506f068b06609acc29647",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a stranger withdrawing",
+          "fn": "withdraw",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x9bc620306365f48afee7da153fb955da692538c8e0c7ca17658d8412b54c0d56",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "the guardian withdrawing",
+          "fn": "withdraw",
+          "caller": "guardian",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xf5e0b55536d13a7ee8ee6476f188be54513078c9fc8ea09f10ff379d97a7ccc3",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "the agent granting itself a friend",
+          "fn": "grant_delegate",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x3d0f079ec1e037bddcb5ac92938863c0a434d2b56e5e03c2cac2b44cf7e1d8a4",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a stranger listing a payee",
+          "fn": "add_payee",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x1a1877cead8f6cfc10cfe4fa7385c1231bf4ceca7f02d5b94d5ace076848f9e3",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a stranger naming a guardian",
+          "fn": "set_guardian",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x7baae7f463b613ca13f618899479d19f522bb54d1fbdecbebe8d3e62846375ea",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "naming the seat holder as guardian",
+          "fn": "set_guardian",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x72823266daac14c8ed2f5b6bfdcf995bc9c49c808b15ee4d12b04a6c52257dc4",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a stranger cancelling the request",
+          "fn": "cancel_request",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xc88ca1edd5744cbc6dd66d370a677037b2f8fd6ce90011216b59a3a4b4e027bf",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a stranger vetoing",
+          "fn": "veto",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x443fd9aac06da8b3aabaede463358e546372152a7716591939492b64b151917c",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a stranger deciding",
+          "fn": "decide",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x124ddf304848106b6e436e870473542c489a0bf2b25cca1604ae2090e441d1f0",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "deciding a request that is not escalated",
+          "fn": "decide",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xc0cd4ac02f85befc3732c74c0b5fb8a2bfe2a8be6b994beb6726ad812418a7c3",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "executing a request that is not approved",
+          "fn": "execute",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x301872b2251182b41a34da390c8fc4a75a78e3d47bd83d8e3db070f451a3751c",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "expiring a request that is still live",
+          "fn": "expire_request",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xa59deea93443cc1276515b77ed3b8b91e6004f120b27f04c65f1cba7e7d37afb",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "auditing without a challenge",
+          "fn": "audit",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xc433a19cd0e0c9fc4b8712260e45842e78c5a8418e1e3d9956564321e67af8e6",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "executing an unknown request",
+          "fn": "execute",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xc5ded068bcf75ba145fc0bfd5068c645b4015ec145012a10a75bb3bf2d5889ae",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "reviewing an unknown request",
+          "fn": "review",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x8dd8f2530b0bc214b463af233967c2d440d3dedd5db9765a946bbc6ab77b06c9",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "withdrawing more than the mandate holds",
+          "fn": "withdraw",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xf17c9a14d559163269767a20e84b0a82c8d9c43573c46ec21f87f148924330a4",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "withdrawing nothing",
+          "fn": "withdraw",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x9fa0ad80ca459de839967d8e518bc1f4aa4d0021a77e97eaae799e331d705347",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "funding with no value",
+          "fn": "fund",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xab1984bd6ecc25bae79cae8f071f9b1fc848a0309ac80fe0bf5c9008a64971ba",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "challenging a request that is only pending",
+          "fn": "challenge",
+          "caller": "watcher",
+          "value": "1000000000000000",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x92e3303437295fdac5f897561c4eef8c61ac8a4a4d721318eed958d548bb3cee",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a request whose purpose tries to steer the reviewer",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x91fce4388f8d61b6d2aa0e27e5fd199b4b498ae1f37273cbd24ae0879ff8ae9b",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "review of the steering request",
+          "fn": "review",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x0fe929c51fbe3bd50fbd641aa860691fd5baee1fceff25d381b3bc9ba653c859",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "cancel_request",
+          "fn": "cancel_request",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x4051de7f50a2cabd7acbd1988e9dac7b498be0d62b5e128ea4aa227c569e3e46",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "withdraw the leftovers",
+          "fn": "withdraw",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xec1e465e2eeccf2ff5feaf9bff630efb6a6b7f1f0fb59c6b0ff847b0ee9fd5f6",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        }
+      ],
+      "checks": [
+        {
+          "name": "create_mandate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the new mandate is the newest one of the owner",
+          "ok": true,
+          "detail": "id 1, mandates before 1"
+        },
+        {
+          "name": "grant_delegate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "a normal request (for the refusals below) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "a request from someone without a seat is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a request from someone without a seat changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "a request above the per-payment limit is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a request above the per-payment limit changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "a request below the minimum is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a request below the minimum changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "the agent paying itself is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "the agent paying itself changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "a purpose that is too short is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a purpose that is too short changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "evidence on a private address is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "evidence on a private address changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "evidence with credentials is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "evidence with credentials changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "the same evidence under another spelling is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "the same evidence under another spelling changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "the agent changing the rules is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "the agent changing the rules changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "the guardian changing the policy is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "the guardian changing the policy changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "a stranger withdrawing is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a stranger withdrawing changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "the guardian withdrawing is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "the guardian withdrawing changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "the agent granting itself a friend is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "the agent granting itself a friend changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "a stranger listing a payee is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a stranger listing a payee changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "a stranger naming a guardian is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a stranger naming a guardian changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "naming the seat holder as guardian is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "naming the seat holder as guardian changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "a stranger cancelling the request is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a stranger cancelling the request changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "a stranger vetoing is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a stranger vetoing changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "a stranger deciding is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a stranger deciding changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "deciding a request that is not escalated is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "deciding a request that is not escalated changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "executing a request that is not approved is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "executing a request that is not approved changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "expiring a request that is still live is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "expiring a request that is still live changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "auditing without a challenge is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "auditing without a challenge changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "executing an unknown request is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "executing an unknown request changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "reviewing an unknown request is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "reviewing an unknown request changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "withdrawing more than the mandate holds is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "withdrawing more than the mandate holds changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "withdrawing nothing is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "withdrawing nothing changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "funding with no value is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "funding with no value changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "challenging a request that is only pending is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "challenging a request that is only pending changed no totals",
+          "ok": true,
+          "detail": "55000000000000000/35000000000000000/0/1/0"
+        },
+        {
+          "name": "a request whose purpose tries to steer the reviewer succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the review of the steering request was decided",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the steering request is rejected without asking the model",
+          "ok": true,
+          "detail": "REJECTED Rejected by the review: The purpose text tries to steer the reviewer."
+        },
+        {
+          "name": "the rejected request reserved nothing",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "the normal request is untouched by all the refusals",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cancel_request succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the books balance",
+          "ok": true,
+          "detail": "deposited 0.055 GEN, paid 0.035 GEN, held 0.02 GEN, bonds 0 GEN"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "name": "expiry",
+      "note": "a request nobody acts on expires, a withdrawn one frees its evidence, an ended mandate pays nothing",
+      "status": "passed",
+      "steps": [
+        {
+          "label": "create_mandate",
+          "fn": "create_mandate",
+          "caller": "owner",
+          "value": "20000000000000000",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xf1a6ccd1fccee4619d650faf3d82d0c6a5b2c28a37024411cbd416733f14271b",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "set_rules",
+          "fn": "set_rules",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x78fda1d8aa95777a7c53686f90fdcef49fbfbeef1c073527182aa9be85e9d97e",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "grant_delegate",
+          "fn": "grant_delegate",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xe194890ae2d6dccaf08c0e1bcfabb781a0794eaadadebb2161bdb68ca9045b70",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "request_payment (to be withdrawn)",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xe94dcd9fb2705c35c3058ce90486eb0164928639056f181ec753088966be6f72",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "the same evidence while the first request is open",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xe779a98d65c82c7323ee141ad6786687e53957d016a49549b6025f1bf5d8910b",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "cancel_request",
+          "fn": "cancel_request",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x5aca69992f4e584770fdef54143dfbdb07d660701eb77b343273161edff6f5bf",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "request_payment (evidence free again)",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x2f743d12f0a4c3f54f9dc22fe3cfb7ee4cb777e477c17df3e466f51d8d14b3ec",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "expiring before the time is over",
+          "fn": "expire_request",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xe60d3304dfc98756c37ad4f4792570984115c4ca266dfd325980965445563e05",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "expire_request",
+          "fn": "expire_request",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x88aa43c680f7d4f64d36e30dae7eb76b59040ac6adfed23f3c716f090c5a5d12",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "expiring twice",
+          "fn": "expire_request",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x6b8d7c7f63f22e1e1e85264ea3d72803fcdd262ebc021049d3eec21e61c29181",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "set_rules (the mandate ends in a minute)",
+          "fn": "set_rules",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xe5556fb61f7b3a447da98f3096ddd0a46bd2cabec31fb1583a4ccf906b2ecb3f",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "a request after the mandate ended",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x043afab5e15a422d4a9ce13b99ef5e548cee3183a4b334f602a775e65e0684ad",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "withdraw from an ended mandate",
+          "fn": "withdraw",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xa3db6a9c93d2141c67a4b991ff2da98c86df7fdfda0e885a467b277809d37a8e",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        }
+      ],
+      "checks": [
+        {
+          "name": "create_mandate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the new mandate is the newest one of the owner",
+          "ok": true,
+          "detail": "id 2, mandates before 2"
+        },
+        {
+          "name": "set_rules succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "grant_delegate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "request_payment (to be withdrawn) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the same evidence while the first request is open is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "the same evidence while the first request is open changed no totals",
+          "ok": true,
+          "detail": "75000000000000000/55000000000000000/0/3/0"
+        },
+        {
+          "name": "cancel_request succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the request is cancelled",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "request_payment (evidence free again) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "expiring before the time is over is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "expiring before the time is over changed no totals",
+          "ok": true,
+          "detail": "75000000000000000/55000000000000000/0/4/0"
+        },
+        {
+          "name": "expire_request succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the request is expired",
+          "ok": true,
+          "detail": "EXPIRED"
+        },
+        {
+          "name": "expiring twice is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "expiring twice changed no totals",
+          "ok": true,
+          "detail": "75000000000000000/55000000000000000/0/4/0"
+        },
+        {
+          "name": "the seat has no open requests left",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "set_rules (the mandate ends in a minute) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "a request after the mandate ended is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a request after the mandate ended changed no totals",
+          "ok": true,
+          "detail": "75000000000000000/55000000000000000/0/4/0"
+        },
+        {
+          "name": "the mandate reports that it has ended",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "withdraw from an ended mandate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the books balance",
+          "ok": true,
+          "detail": "deposited 0.075 GEN, paid 0.075 GEN, held 0 GEN, bonds 0 GEN"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "name": "review",
+      "note": "the real AI reviews requests; whatever it answers is followed to the end",
+      "status": "passed",
+      "steps": [
+        {
+          "label": "create_mandate",
+          "fn": "create_mandate",
+          "caller": "owner",
+          "value": "30000000000000000",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xd3a5aa6ee417b160c0536454b0a5da95d82f1911727f6807ae3df828128e95f4",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "set_rules",
+          "fn": "set_rules",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x099ed9710cc490ee2810111cc04aa08e796a1d4c997596d979c4190079dcfe21",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "grant_delegate",
+          "fn": "grant_delegate",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xdaf4fb0b68342f6ed75887a3469e8f33b39df3cf3f8540c8dec7e7e0d7ab3295",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "create_mandate",
+          "fn": "create_mandate",
+          "caller": "owner",
+          "value": "10000000000000000",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xfb265039bf8b1dd0191d6bd6c81ea83fe6dea156f27bb0e5bb7bcacd3a68c2b5",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "grant_delegate",
+          "fn": "grant_delegate",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x3d57f3b14e01efa1e6e3a7931d68ea392d0a9ece6dc3f2cac0ec3a3198b7829e",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "request_payment (off policy, no evidence)",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x1dacd4d2a75ffb7136a0b483340b266fb55d3909109d6807b449d66e1f88cef4",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "review",
+          "fn": "review",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xf0bb95f6ad85ed61021cac41d16d551c3c6198cf4970210355cdb72f7abbe231",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "withdraw the leftovers",
+          "fn": "withdraw",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xb3d1f8ce39bfd3d2d2f523d3d78d745683e1c1692c8ee750c2e27f567fe36cdf",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "request_payment",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xa9c09e8207cbb9dc0cd69c8a8522f8da4989904c92045c13f83a64f946935abb",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "review",
+          "fn": "review",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x7057c515290934dd3cfe64c2ca37a093b4877ef41b630eb375e9bec7494660bf",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "executing inside the waiting time",
+          "fn": "execute",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x9e020c99d1820bc398c44309787adae9333312eb9d6aa3cfa1d1ad053ec966f2",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "execute",
+          "fn": "execute",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xe4d69a9d55aaf8a40a708bd354ff584979868f77c58bc6dfa3ef1fc7cdf51d0a",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "executing twice",
+          "fn": "execute",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x61a49f9674ff4652f3807d8e3eba6056b2ebbd8a73f0bf6ba0b22cc7953cec20",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "reusing the paid evidence",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x7d0ead59010a9395a61e20e7943cee3653ce76aa3700e77288a360133475ae8b",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "withdraw the leftovers",
+          "fn": "withdraw",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x5851bb4b720624fd7e37920b5ab50ef05dda9bd238e57b77b5fb2ce15b13141b",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        }
+      ],
+      "checks": [
+        {
+          "name": "create_mandate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the new mandate is the newest one of the owner",
+          "ok": true,
+          "detail": "id 3, mandates before 3"
+        },
+        {
+          "name": "set_rules succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "grant_delegate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "create_mandate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the new mandate is the newest one of the owner",
+          "ok": true,
+          "detail": "id 4, mandates before 4"
+        },
+        {
+          "name": "grant_delegate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "request_payment (off policy, no evidence) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "review 4 was decided",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "an off-policy request is not approved by the AI",
+          "ok": true,
+          "detail": "REJECTED"
+        },
+        {
+          "name": "nothing stays reserved for the off-policy request",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "request_payment succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "review 5 was decided",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the approval reserves exactly the amount",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "the waiting time after an AI approval is the review delay",
+          "ok": true,
+          "detail": "ready_at - review.at = 60"
+        },
+        {
+          "name": "executing inside the waiting time is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "executing inside the waiting time changed no totals",
+          "ok": true,
+          "detail": "115000000000000000/85000000000000000/0/6/0"
+        },
+        {
+          "name": "execute succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the request is executed",
+          "ok": true,
+          "detail": "EXECUTED"
+        },
+        {
+          "name": "the payee received exactly the amount",
+          "ok": true,
+          "detail": "0.002 GEN"
+        },
+        {
+          "name": "executing twice is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "executing twice changed no totals",
+          "ok": true,
+          "detail": "115000000000000000/87000000000000000/0/6/1"
+        },
+        {
+          "name": "the seat and the mandate booked the payment",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "reusing the paid evidence is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "reusing the paid evidence changed no totals",
+          "ok": true,
+          "detail": "115000000000000000/87000000000000000/0/6/1"
+        },
+        {
+          "name": "the books balance",
+          "ok": true,
+          "detail": "deposited 0.115 GEN, paid 0.087 GEN, held 0.028 GEN, bonds 0 GEN"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "name": "veto",
+      "note": "an approval is stopped by the guardian and the money is released",
+      "status": "passed",
+      "steps": [
+        {
+          "label": "create_mandate",
+          "fn": "create_mandate",
+          "caller": "owner",
+          "value": "30000000000000000",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xd21d9cefb2ddbac27db1d4cfdf4645196b26b00f91de2a324a4bcf8448efc4e5",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "grant_delegate",
+          "fn": "grant_delegate",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xfb3abf2a852b097a054a9de0404aadc4625252a7f52b8f57e3dfdc8357ab188b",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "request_payment",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xd55b4906b35f70d9b8b00d5dd1a54bae4817ef3d35a8c09ce025d919cb64de9b",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "review",
+          "fn": "review",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x1122b9c6775b5a36f6e4d7ea47346be6dabf40bc6933de2a9874a7e5e3f3a356",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "decide (approve the escalation)",
+          "fn": "decide",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x1c643a0dda7b893297bb9d8686591930ce5d2f1481399a130928b0f88266a44e",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "a stranger vetoing",
+          "fn": "veto",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x8bb41c73b905adc22fda539d52ae8013e8ab4b6889a746990f9080211ef7b932",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "the agent vetoing",
+          "fn": "veto",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x833e9574f147447bfc98fd5e6e4a63c9b13047df96493e836e1078b558b54e1b",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "veto (guardian)",
+          "fn": "veto",
+          "caller": "guardian",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x41b4cd0f90c6f3ddc22616cfeeec93428b25b551076587297adb03809d38e374",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "executing a vetoed request",
+          "fn": "execute",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x2a8aa35d27732e36413ccef444497057fcb6e83bcedd471f38fa1b7b351c5f37",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "cancelling a vetoed request",
+          "fn": "cancel_request",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xbb19c19b563350fe034ad276189c6fe0697da82ff86c7c0705a1e1e117dcade6",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "request_payment (the evidence is free again)",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x861e4afbf8ebd08910cda56ba015e20c31badaef6fc1a695f6c204d469961aa5",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "cancel_request",
+          "fn": "cancel_request",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x27d02a8a876456c18ccc460ca9b3c410ff99c27f1291534bef35c254188231c6",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "withdraw the leftovers",
+          "fn": "withdraw",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x80a06fe0b180801558c9e52ed97d2930e4aa9c35e9b34c4f857f75bd4b137ca0",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        }
+      ],
+      "checks": [
+        {
+          "name": "create_mandate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the new mandate is the newest one of the owner",
+          "ok": true,
+          "detail": "id 5, mandates before 5"
+        },
+        {
+          "name": "grant_delegate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "request_payment succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "review 6 was decided",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "decide (approve the escalation) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the money is reserved while the request is approved",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "a stranger vetoing is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a stranger vetoing changed no totals",
+          "ok": true,
+          "detail": "145000000000000000/115000000000000000/0/7/1"
+        },
+        {
+          "name": "the agent vetoing is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "the agent vetoing changed no totals",
+          "ok": true,
+          "detail": "145000000000000000/115000000000000000/0/7/1"
+        },
+        {
+          "name": "veto (guardian) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the request is vetoed",
+          "ok": true,
+          "detail": "VETOED"
+        },
+        {
+          "name": "the reservation and the seat budget are released",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "executing a vetoed request is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "executing a vetoed request changed no totals",
+          "ok": true,
+          "detail": "145000000000000000/115000000000000000/0/7/1"
+        },
+        {
+          "name": "cancelling a vetoed request is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "cancelling a vetoed request changed no totals",
+          "ok": true,
+          "detail": "145000000000000000/115000000000000000/0/7/1"
+        },
+        {
+          "name": "request_payment (the evidence is free again) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "a vetoed request frees its evidence",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "cancel_request succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the books balance",
+          "ok": true,
+          "detail": "deposited 0.145 GEN, paid 0.115 GEN, held 0.03 GEN, bonds 0 GEN"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "name": "challenge",
+      "note": "a watcher bets a bond against an AI approval; the stricter audit settles it",
+      "status": "passed",
+      "steps": [
+        {
+          "label": "create_mandate",
+          "fn": "create_mandate",
+          "caller": "owner",
+          "value": "30000000000000000",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xc57014b992209706cc1843d9bc1a086f45f87d3e87f4e808570de53fd7582cc6",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "set_rules",
+          "fn": "set_rules",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x1813aaa6259b8d461d4878c493543b5f61ad3a42f12ecffd5f0cdf364f23c3a6",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "grant_delegate",
+          "fn": "grant_delegate",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xf7e04e48e0a757cc06f754dbe3ad09129531de36f121b6a9909e4862d9988976",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "request_payment",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xff384fa754b1f4da23fe0da31953120b9d66e494175eb31437c5e302ace6c68d",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "review",
+          "fn": "review",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x0e4a70ea99461aa3c5396e0d6404fc72fa6fcbf7b93b1bfa58dcc0ec4ea8f72d",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "a challenge with the wrong bond",
+          "fn": "challenge",
+          "caller": "watcher",
+          "value": "1000000000000001",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x0501aa04b9fd442fe3d5d0b633ca746b212b4efd2db11276622a083076fb7c85",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "a challenge without a reason",
+          "fn": "challenge",
+          "caller": "watcher",
+          "value": "1000000000000000",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xf449910f97205771ae173993dbe63c21acb0130074f3c6fa4029afa7543179c8",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "the agent challenging its own request",
+          "fn": "challenge",
+          "caller": "agent",
+          "value": "1000000000000000",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xa4b92a5aa6b66428d4c6a0db3c2fd377371fc42e2730ed622271d4be7acdda30",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "the owner challenging",
+          "fn": "challenge",
+          "caller": "owner",
+          "value": "1000000000000000",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x8ae67af558984721f87995b12f41ebdcc2a42a97985fe8432a8c1c5bab32a3b8",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "challenge",
+          "fn": "challenge",
+          "caller": "watcher",
+          "value": "1000000000000000",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x844b04409124a15817cee1e903da5d9ad0e7f0671210df26621feced0e580790",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "executing a challenged request",
+          "fn": "execute",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x0bc1c502b33db54d0437d26ed439c23842ec526a6838ba097d3ec422aa424e46",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "the agent withdrawing a challenged request",
+          "fn": "cancel_request",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x8e8401481e65f6ec14065c8631daf27c349a39664fd9712c0783d2e725576ddd",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "challenging twice",
+          "fn": "challenge",
+          "caller": "watcher",
+          "value": "1000000000000000",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x88b9b78cafedbff69906a234348b20d5f2a4ca0c83b26648ec2378da027655a9",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "audit",
+          "fn": "audit",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xb7477a482357e419f0112b669fc8840ce6a51690b4855d610f2756162c683dc2",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "execute",
+          "fn": "execute",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xdea87c19927f9f0bb0d99b7093367080e004d82e0064510608d27297faf6ad58",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "challenging a paid request",
+          "fn": "challenge",
+          "caller": "watcher",
+          "value": "1000000000000000",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x270375ac060aeb6a78c93df5f08a63a18bdd143f3cbb0eb54e60369bd3dd2871",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "withdraw the leftovers",
+          "fn": "withdraw",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x7bf25945f8f638ffc25186473a8f356473d6fbb67b19cf4505dc71463355b7b1",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        }
+      ],
+      "checks": [
+        {
+          "name": "create_mandate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the new mandate is the newest one of the owner",
+          "ok": true,
+          "detail": "id 6, mandates before 6"
+        },
+        {
+          "name": "set_rules succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "grant_delegate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "request_payment succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "review 8 was decided",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "a challenge with the wrong bond is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a challenge with the wrong bond changed no totals",
+          "ok": true,
+          "detail": "175000000000000000/145000000000000000/0/9/1"
+        },
+        {
+          "name": "a challenge without a reason is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a challenge without a reason changed no totals",
+          "ok": true,
+          "detail": "175000000000000000/145000000000000000/0/9/1"
+        },
+        {
+          "name": "the agent challenging its own request is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "the agent challenging its own request changed no totals",
+          "ok": true,
+          "detail": "175000000000000000/145000000000000000/0/9/1"
+        },
+        {
+          "name": "the owner challenging is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "the owner challenging changed no totals",
+          "ok": true,
+          "detail": "175000000000000000/145000000000000000/0/9/1"
+        },
+        {
+          "name": "challenge succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the request is under challenge and the bond is held",
+          "ok": true,
+          "detail": "CHALLENGED bond 0.001 GEN"
+        },
+        {
+          "name": "the books balance with a bond held",
+          "ok": true,
+          "detail": "deposited 0.176 GEN, paid 0.145 GEN, held 0.03 GEN, bonds 0.001 GEN"
+        },
+        {
+          "name": "the bond is counted separately",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "executing a challenged request is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "executing a challenged request changed no totals",
+          "ok": true,
+          "detail": "176000000000000000/145000000000000000/1000000000000000/9/1"
+        },
+        {
+          "name": "the agent withdrawing a challenged request is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "the agent withdrawing a challenged request changed no totals",
+          "ok": true,
+          "detail": "176000000000000000/145000000000000000/1000000000000000/9/1"
+        },
+        {
+          "name": "challenging twice is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "challenging twice changed no totals",
+          "ok": true,
+          "detail": "176000000000000000/145000000000000000/1000000000000000/9/1"
+        },
+        {
+          "name": "the audit was decided",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the challenge was dismissed: the bond stays with the mandate",
+          "ok": true,
+          "detail": "bond state 3"
+        },
+        {
+          "name": "execute succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the dismissed request can be paid after the waiting time",
+          "ok": true,
+          "detail": "EXECUTED"
+        },
+        {
+          "name": "the payee received exactly the amount",
+          "ok": true,
+          "detail": "0.002 GEN"
+        },
+        {
+          "name": "challenging a paid request is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "challenging a paid request changed no totals",
+          "ok": true,
+          "detail": "176000000000000000/147000000000000000/0/9/2"
+        },
+        {
+          "name": "no bond is held after the audit",
+          "ok": true,
+          "detail": "0 GEN"
+        },
+        {
+          "name": "the books balance",
+          "ok": true,
+          "detail": "deposited 0.176 GEN, paid 0.147 GEN, held 0.029 GEN, bonds 0 GEN"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "name": "limits",
+      "note": "the rolling window and the seat budget hold, also against approved requests",
+      "status": "passed",
+      "steps": [
+        {
+          "label": "create_mandate",
+          "fn": "create_mandate",
+          "caller": "owner",
+          "value": "30000000000000000",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x3d296aba88c983a57bf9a34a2fa33d8da70ff4a55b9841fd27ded48e40af2986",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "set_rules",
+          "fn": "set_rules",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xe6a14ce02ecff3e52ec9b18dafb246d1fb34360d894302e789e5c228de141a68",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "grant_delegate",
+          "fn": "grant_delegate",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x8484569794f0af22fc978342c3fb533e01628e115c456a5f8a3c78e580d0594a",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "request_payment",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x145f4db4ad5ac8cfd2ba7d3318742b0320f497952d8219a08bbc0fa85df2f4ad",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "review",
+          "fn": "review",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xc13b0d0957a305c0073c4985e8adb900d2d94791b7345f2042430923caa9c3ec",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "decide (approve the escalation)",
+          "fn": "decide",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xc1b9831b4fc344f9561f4f89b68fdfb6c9fe7d917652d7140cb427b861bf5b84",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "execute (fills the window)",
+          "fn": "execute",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x92019c98311551fadebaf280ab87b49739d8c3a03d4d7cd7fc59536aaa1acf9d",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "a request above the seat's remaining budget",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0x2809a43c0fb2c4479e561f2b13dd7be96a0a77198ad0ff98537b3dded8437c52",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "request_payment",
+          "fn": "request_payment",
+          "caller": "agent",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x354c3b33aabe7083ddc46f94ac8473fba6f4a70f41b3df4975c9c2bcf286b024",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "review",
+          "fn": "review",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x29d1ab87a7a4a6d35bd524eed7d3e0f824db98dc2d2451002b4b1fcae5e6441f",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "decide (approve the escalation)",
+          "fn": "decide",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x9a2fd3d965492daee4c45dff69c049f7901303b2d2fed82c1e0ba6e4512ccd89",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "execute above the rolling window limit",
+          "fn": "execute",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": true,
+          "attempt": 1,
+          "hash": "0xe9265ebab3072fded7cf0c1f26a172d86a76d4e5093cad54cf91c5bce3263b49",
+          "ok": false,
+          "status": "ACCEPTED / ERROR"
+        },
+        {
+          "label": "execute (the window has slid)",
+          "fn": "execute",
+          "caller": "outsider",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0x870e11b7fde87010d692829cd039fcb5b94e9b72c1323eda30be1c7c6e2b3e86",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        },
+        {
+          "label": "withdraw the leftovers",
+          "fn": "withdraw",
+          "caller": "owner",
+          "value": "0",
+          "expectedFail": false,
+          "attempt": 1,
+          "hash": "0xbefc9a0c759031085fa52cdd83e98f304599e8e4568b0053fb938d7ce4249af6",
+          "ok": true,
+          "status": "ACCEPTED / SUCCESS"
+        }
+      ],
+      "checks": [
+        {
+          "name": "create_mandate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the new mandate is the newest one of the owner",
+          "ok": true,
+          "detail": "id 7, mandates before 7"
+        },
+        {
+          "name": "set_rules succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "grant_delegate succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "request_payment succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "review 9 was decided",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "decide (approve the escalation) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "execute (fills the window) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the first payment is executed",
+          "ok": true,
+          "detail": "EXECUTED"
+        },
+        {
+          "name": "the payee received the amount",
+          "ok": true,
+          "detail": "0.01 GEN"
+        },
+        {
+          "name": "the allowance shows an empty window and a small seat budget",
+          "ok": true,
+          "detail": "{\"seat\":true,\"usable\":true,\"per_payment\":\"10000000000000000\",\"seat_left\":\"2000000000000000\",\"unreserved\":\"20000000000000000\",\"window_left\":\"0\",\"open_slots\":3,\"max_request\":\"2000000000000000\"}"
+        },
+        {
+          "name": "a request above the seat's remaining budget is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "a request above the seat's remaining budget changed no totals",
+          "ok": true,
+          "detail": "206000000000000000/186000000000000000/0/10/3"
+        },
+        {
+          "name": "request_payment succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "review 10 was decided",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "decide (approve the escalation) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "execute above the rolling window limit is refused by the contract",
+          "ok": true,
+          "detail": "ACCEPTED / ERROR"
+        },
+        {
+          "name": "execute above the rolling window limit changed no totals",
+          "ok": true,
+          "detail": "206000000000000000/186000000000000000/0/11/3"
+        },
+        {
+          "name": "the refused payment stays approved and reserved",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "execute (the window has slid) succeeds",
+          "ok": true,
+          "detail": "ACCEPTED / SUCCESS"
+        },
+        {
+          "name": "the second payment is executed once the window slid",
+          "ok": true,
+          "detail": "EXECUTED"
+        },
+        {
+          "name": "the second payee received the amount",
+          "ok": true,
+          "detail": "0.002 GEN"
+        },
+        {
+          "name": "the seat spent exactly what was paid",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "the books balance",
+          "ok": true,
+          "detail": "deposited 0.206 GEN, paid 0.188 GEN, held 0.018 GEN, bonds 0 GEN"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "name": "totals",
+      "note": "the contract's own books after the run",
+      "status": "passed",
+      "steps": [],
+      "checks": [
+        {
+          "name": "the contract's books balance at the end",
+          "ok": true,
+          "detail": "deposited 0.206 GEN, paid 0.206 GEN, held 0 GEN, bonds 0 GEN"
+        },
+        {
+          "name": "no bond is left held",
+          "ok": true,
+          "detail": "0 GEN"
+        },
+        {
+          "name": "nothing is reserved without an open approval",
+          "ok": true,
+          "detail": "0 GEN"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "summary": {
+    "checks": 232,
+    "passed": 232,
+    "failed": 0,
+    "transactions": 122,
+    "skipped": 0
+  }
+}
