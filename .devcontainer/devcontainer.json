@@ -1,0 +1,18 @@
+{
+  "name": "Leash on Studionet",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "20" }
+  },
+  "postCreateCommand": "bash scripts/setup.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"]
+    }
+  },
+  "secrets": {
+    "OWNER_KEY": { "description": "Private key (0x...) of the account that owns the test mandates" },
+    "AGENT_KEY": { "description": "Private key (0x...) of the account that acts as the spending agent" },
+    "WATCHER_KEY": { "description": "Optional: private key of the account that posts challenge bonds" }
+  }
+}
