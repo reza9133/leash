@@ -226,6 +226,33 @@ in the local test runner with a scripted model. It checks the live script's own 
 chain time, report generation) without spending anything. `REVIEW_MODE=escalate|reject` and `AUDIT_MODE=reject` steer
 the scripted model. It cannot tell you anything about the real model or the real network.
 
+## Frontend
+
+`frontend/` is the web app: a multi-page React site with the dashboard, mandate and request screens, an explorer and
+full documentation (21 pages with search). It talks to the contract at
+`0x13Ad9bC5C0a1fcC19f5C410b6685EB6029893CB5` on GenLayer Studionet through `genlayer-js`.
+
+Explorer: https://explorer-studio.genlayer.com/address/0x13Ad9bC5C0a1fcC19f5C410b6685EB6029893CB5
+
+```bash
+cd frontend
+npm install
+npm run dev                # local development
+npm run build              # type check and production build into frontend/dist
+npm test                   # unit tests
+npm run check:contract     # fails when the generated interface differs from contracts/leash.py
+```
+
+* Wallets are discovered with EIP-6963; connect and disconnect really change the wallet permission; a banner offers to
+  switch (or add) Studionet when the wallet is on another network.
+* Three themes (light, dim, dark), a 3D hero with a flat fallback, and a transaction panel that follows each
+  transaction through the consensus phases.
+* The list of methods, parameters, errors and constants is generated from the contract
+  (`npm run sync:contract`), so the interface cannot drift from it.
+* Set `VITE_LEASH_ADDRESS` at build time to use another deployment.
+
+See `frontend/README.md` for details and `frontend/tests/e2e/README.md` for the browser tests.
+
 ## Limitations
 
 * Duplicate protection is by evidence address, not by meaning: an agent can describe the same invoice with a different
@@ -242,6 +269,7 @@ the scripted model. It cannot tell you anything about the real model or the real
 
 ```
 contracts/leash.py        the contract
+frontend/                 the web app and its documentation
 tests/direct/             the local test suite (pytest)
 scripts/                  deploy, keys, live run, receipt reader, setup, run-all
 rehearsal/                offline rehearsal of the live run
