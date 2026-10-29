@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leash: spending mandates for autonomous agents</title>
+    <meta name="description" content="Leash is a spending mandate for autonomous agents on GenLayer. Hard limits the contract enforces, an AI reviewer that can only say no, a human veto, and watchers who can challenge." />
+    <meta name="theme-color" content="#edf0f4" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <script>
+      // Set the saved theme before the first paint so the page does not flash.
+      try {
+        var t = localStorage.getItem("leash.theme");
+        if (t !== "light" && t !== "dim" && t !== "dark") {
+          t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dim" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <noscript>Leash needs JavaScript to talk to your wallet and to GenLayer.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
