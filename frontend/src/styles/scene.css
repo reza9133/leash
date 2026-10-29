@@ -1,0 +1,56 @@
+/* 3D pieces: the hero scene, the layer stack and the tilt effect. */
+
+/* ---- hero scene ------------------------------------------------------------------------------------------------------------- */
+
+.scene { position: absolute; inset: 0; }
+.scene__canvas { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s var(--ease); }
+.scene__canvas.is-ready { opacity: 1; }
+.scene__fallback { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0.9; }
+.scene__fallback .leash-mark { filter: drop-shadow(0 18px 24px color-mix(in srgb, var(--ink) 18%, transparent)); animation: scene-sway 6s ease-in-out infinite alternate; }
+@keyframes scene-sway { from { transform: rotate(-3deg) translateY(0); } to { transform: rotate(3deg) translateY(-8px); } }
+
+/* ---- tilt ------------------------------------------------------------------------------------------------------------------- */
+
+.tilt { transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); transition: transform 0.5s var(--ease); }
+.tilt.is-tilting { transition: transform 0.08s linear; will-change: transform; }
+
+/* ---- layer stack --------------------------------------------------------------------------------------------------------------- */
+
+.stack3d { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-7); align-items: center; }
+.stack3d__stage { perspective: 1400px; perspective-origin: 50% 30%; min-height: 26rem; display: grid; place-items: center; }
+.stack3d__scene { position: relative; width: 17rem; height: 11rem; transform-style: preserve-3d; transform: rotateX(58deg) rotateZ(-34deg); transition: transform 0.6s var(--ease); }
+.slab {
+  position: absolute; inset: 0; display: flex; align-items: center; gap: 0.9rem; padding: 0 1.25rem; text-align: left;
+  border-radius: 16px; border: 1px solid var(--line); border-bottom-width: 1px; background: var(--surface); color: var(--ink);
+  box-shadow: 0 1px 0 var(--line-soft), 6px 10px 0 -2px var(--line-soft);
+  transform: translateZ(calc(var(--i) * 3.9rem + var(--lift, 0) * 1.5rem));
+  transition: transform 0.5s var(--ease-spring), background-color 0.2s, border-color 0.2s;
+}
+.slab:nth-child(1) { background: var(--surface-3); }
+.slab.is-active { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 1px 0 var(--accent), 8px 14px 0 -2px color-mix(in srgb, var(--accent) 30%, transparent); }
+.slab__icon { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; flex: none; border-radius: 12px; background: var(--ink); color: var(--ink-inverse); }
+.slab.is-active .slab__icon { background: var(--accent); color: var(--on-accent); }
+.slab__text { display: grid; gap: 0.1rem; }
+.slab__text strong { font-size: var(--fs-l); font-stretch: var(--semi-wide); letter-spacing: -0.02em; }
+.slab__text small { color: var(--ink-3); font-size: 0.8125rem; }
+.stack3d__detail { display: grid; gap: var(--space-3); max-width: 34rem; }
+.stack3d__detail h3 { font-size: var(--fs-2xl); }
+.stack3d__detail > p { color: var(--ink-2); font-size: var(--fs-l); line-height: 1.5; }
+.stack3d__tag { color: var(--accent-text); font-weight: 700; font-size: var(--fs-s); }
+.stack3d__detail ul { margin: var(--space-2) 0 0; padding: 0; list-style: none; display: grid; gap: 0.6rem; }
+.stack3d__detail li { padding-left: 1.25rem; position: relative; color: var(--ink); line-height: 1.5; }
+.stack3d__detail li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 0.6rem; height: 0; border-top: 3px dashed var(--accent); }
+
+@media (max-width: 900px) {
+  .stack3d { grid-template-columns: 1fr; gap: var(--space-5); }
+  .stack3d__stage { min-height: 0; perspective: none; display: block; }
+  .stack3d__scene { width: auto; height: auto; transform: none; display: grid; gap: 0.5rem; }
+  .slab { position: relative; inset: auto; transform: none; padding: 0.9rem 1rem; box-shadow: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stack3d__stage { min-height: 0; perspective: none; display: block; }
+  .stack3d__scene { width: auto; height: auto; transform: none; display: grid; gap: 0.5rem; }
+  .slab { position: relative; inset: auto; transform: none; transition: none; box-shadow: none; }
+  .scene__fallback .leash-mark { animation: none; }
+  .tilt { transition: none; transform: none; }
+}

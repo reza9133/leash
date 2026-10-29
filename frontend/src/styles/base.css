@@ -1,0 +1,107 @@
+/* Reset, typography and the small set of primitives shared by every page. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 24px);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-m);
+  line-height: 1.55;
+  font-stretch: 100%;
+  font-weight: 420;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+
+h1, h2, h3, h4, h5, p, ul, ol, dl, figure, blockquote, pre { margin: 0; }
+
+h1, h2 {
+  font-stretch: var(--wide);
+  font-weight: 800;
+  letter-spacing: -0.022em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+h3 { font-stretch: var(--semi-wide); font-weight: 760; letter-spacing: -0.012em; line-height: 1.15; text-wrap: balance; }
+h4 { font-weight: 700; letter-spacing: -0.005em; line-height: 1.25; }
+h5 { font-weight: 700; font-size: var(--fs-s); line-height: 1.3; }
+
+p { text-wrap: pretty; }
+
+a { color: inherit; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-color: var(--accent); color: var(--accent-text); }
+
+img, svg, canvas { display: block; max-width: 100%; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:disabled, [aria-disabled="true"] { cursor: not-allowed; }
+
+code, kbd, samp, pre, .mono {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+}
+
+hr { border: 0; border-top: 1px solid var(--line-soft); margin: var(--space-6) 0; }
+
+::selection { background: var(--accent); color: var(--on-accent); }
+
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+.num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+.skip-link {
+  position: fixed; left: 12px; top: -60px; z-index: 1000; background: var(--ink); color: var(--ink-inverse);
+  padding: 0.6rem 0.9rem; border-radius: var(--r-s); transition: top 0.2s;
+}
+.skip-link:focus { top: 12px; }
+
+/* thin, themed scrollbars */
+* { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 10px; border: 2px solid transparent; background-clip: content-box; }
+
+.page {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* The webbing stitch: the dashed line of a sewn strap. Used as an edge, never as decoration on its own. */
+.stitch {
+  height: 3px;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 10px, transparent 10px 17px);
+  border-radius: 2px;
+}
+.stitch--vertical {
+  width: 3px; height: auto;
+  background: repeating-linear-gradient(180deg, var(--accent) 0 10px, transparent 10px 17px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}

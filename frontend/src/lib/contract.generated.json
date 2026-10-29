@@ -1,0 +1,752 @@
+{
+  "contract": "contracts/leash.py",
+  "constants": {
+    "PENDING": "0",
+    "APPROVED": "1",
+    "ESCALATED": "2",
+    "REJECTED": "3",
+    "EXECUTED": "4",
+    "VETOED": "5",
+    "CANCELLED": "6",
+    "EXPIRED": "7",
+    "CHALLENGED": "8",
+    "BY_NONE": "0",
+    "BY_AI": "1",
+    "BY_OWNER": "2",
+    "BY_GUARDIAN": "3",
+    "NO_ROLE": "0",
+    "OWNER": "1",
+    "GUARDIAN": "2",
+    "PAYEE_ANY": "0",
+    "PAYEE_LISTED": "1",
+    "BOND_NONE": "0",
+    "BOND_HELD": "1",
+    "BOND_REFUNDED": "2",
+    "BOND_FORFEITED": "3",
+    "BOND_REWARDED": "4",
+    "BPS": "10000",
+    "MIN_PAYMENT": "1000000000000000",
+    "MAX_AMOUNT": "1000000000000000000000000000",
+    "MAX_DELEGATES": "12",
+    "MAX_PAYEES": "24",
+    "MAX_OPEN": "3",
+    "MAX_WINDOW_ENTRIES": "48",
+    "MAX_PAGE": "50",
+    "MIN_NAME": "3",
+    "MAX_NAME": "60",
+    "MIN_POLICY": "20",
+    "MAX_POLICY": "1200",
+    "MIN_PURPOSE": "12",
+    "MAX_PURPOSE": "300",
+    "MAX_NOTE": "200",
+    "MAX_REASON": "160",
+    "MAX_URL": "300",
+    "MIN_DELAY": "60",
+    "MAX_DELAY": "604800",
+    "MIN_WINDOW": "60",
+    "MAX_WINDOW": "2592000",
+    "MIN_SPAN": "60",
+    "MAX_SPAN": "2592000",
+    "MIN_EXPIRY": "60",
+    "MAX_EXPIRY": "31622400",
+    "DEFAULT_SPAN": "259200",
+    "DEFAULT_AUTO": "35",
+    "DEFAULT_REJECT": "75",
+    "MAX_TRIES": "3",
+    "RETRY_GAP": "120",
+    "BOND_BPS": "500",
+    "MIN_BOND": "1000000000000000",
+    "REWARD_BPS": "1000",
+    "STRICT_NUM": "2",
+    "STRICT_DEN": "3",
+    "EVIDENCE_CHARS": "4000",
+    "MIN_EVIDENCE": "20",
+    "MAX_RAW": "300000",
+    "THIN_PAGE": "200",
+    "RISK_SLACK": "25",
+    "RISK_ROOM": "60"
+  },
+  "methods": [
+    {
+      "name": "create_mandate",
+      "kind": "write",
+      "payable": true,
+      "params": [
+        [
+          "name",
+          "str"
+        ],
+        [
+          "policy",
+          "str"
+        ],
+        [
+          "per_payment_cap",
+          "int"
+        ],
+        [
+          "window_cap",
+          "int"
+        ],
+        [
+          "window_secs",
+          "int"
+        ],
+        [
+          "review_delay",
+          "int"
+        ],
+        [
+          "guardian",
+          "str"
+        ]
+      ],
+      "returns": "int",
+      "errors": [
+        "The name needs 3 to 60 characters.",
+        "The policy needs 20 to 1200 characters.",
+        "The spending window has to be between 1 minute and 30 days.",
+        "The per-payment limit is out of range.",
+        "The window limit must be at least the per-payment limit.",
+        "The review delay has to be between 1 minute and 7 days.",
+        "That address cannot be the guardian.",
+        "That is not a valid address."
+      ]
+    },
+    {
+      "name": "set_rules",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "payee_mode",
+          "int"
+        ],
+        [
+          "need_evidence",
+          "bool"
+        ],
+        [
+          "auto_risk",
+          "int"
+        ],
+        [
+          "reject_risk",
+          "int"
+        ],
+        [
+          "escalation_window",
+          "int"
+        ],
+        [
+          "exec_grace",
+          "int"
+        ],
+        [
+          "expires_in",
+          "int"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "The payee mode is 0 (any) or 1 (listed only).",
+        "The risk limits must satisfy 0 <= auto <= reject <= 100.",
+        "The escalation window and the grace time have to be between 1 minute and 30 days.",
+        "The expiry has to be 0 or between 1 minute and 366 days from now.",
+        "No such mandate.",
+        "Only the owner can do that."
+      ]
+    },
+    {
+      "name": "set_policy",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "policy",
+          "str"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "The policy needs 20 to 1200 characters.",
+        "No such mandate.",
+        "Only the owner can do that."
+      ]
+    },
+    {
+      "name": "set_limits",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "per_payment_cap",
+          "int"
+        ],
+        [
+          "window_cap",
+          "int"
+        ],
+        [
+          "review_delay",
+          "int"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "No such mandate.",
+        "Only the owner can do that.",
+        "The per-payment limit is out of range.",
+        "The window limit must be at least the per-payment limit.",
+        "The review delay has to be between 1 minute and 7 days."
+      ]
+    },
+    {
+      "name": "set_guardian",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "guardian",
+          "str"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "A seat holder cannot also be the guardian.",
+        "No such mandate.",
+        "Only the owner can do that.",
+        "That address cannot be the guardian.",
+        "That is not a valid address."
+      ]
+    },
+    {
+      "name": "set_paused",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "paused",
+          "bool"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "Only the owner can resume a mandate.",
+        "No such mandate."
+      ]
+    },
+    {
+      "name": "fund",
+      "kind": "write",
+      "payable": true,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "Send some GEN to fund the mandate.",
+        "No such mandate."
+      ]
+    },
+    {
+      "name": "withdraw",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "amount",
+          "int"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "The amount has to be positive and not more than the unreserved balance.",
+        "No such mandate.",
+        "Only the owner can do that."
+      ]
+    },
+    {
+      "name": "grant_delegate",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "delegate",
+          "str"
+        ],
+        [
+          "budget",
+          "int"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "That address cannot hold a seat.",
+        "The guardian cannot also hold a seat.",
+        "The budget is out of range.",
+        "All seats of this mandate have been used.",
+        "No such mandate.",
+        "Only the owner can do that.",
+        "That is not a valid address."
+      ]
+    },
+    {
+      "name": "revoke_delegate",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "delegate",
+          "str"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "Only the owner or the guardian can revoke a seat.",
+        "That address holds no seat.",
+        "No such mandate.",
+        "That is not a valid address."
+      ]
+    },
+    {
+      "name": "add_payee",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "payee",
+          "str"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "That address cannot be a payee.",
+        "That payee is already listed.",
+        "The payee list is full.",
+        "No such mandate.",
+        "Only the owner can do that.",
+        "That is not a valid address."
+      ]
+    },
+    {
+      "name": "remove_payee",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "payee",
+          "str"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "That payee is not listed.",
+        "No such mandate.",
+        "Only the owner can do that.",
+        "That is not a valid address."
+      ]
+    },
+    {
+      "name": "request_payment",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "payee",
+          "str"
+        ],
+        [
+          "amount",
+          "int"
+        ],
+        [
+          "purpose",
+          "str"
+        ],
+        [
+          "evidence_url",
+          "str"
+        ]
+      ],
+      "returns": "int",
+      "errors": [
+        "You do not hold an active seat in this mandate.",
+        "Too many open requests for this seat.",
+        "The amount is outside the per-payment limit.",
+        "The amount is more than the seat's remaining budget.",
+        "The mandate does not hold enough unreserved funds.",
+        "The purpose needs 12 to 300 characters.",
+        "The evidence must be a single public http(s) link.",
+        "That evidence already backs another request of this mandate.",
+        "This mandate needs a link to evidence.",
+        "No such mandate.",
+        "The mandate is paused.",
+        "The mandate has expired.",
+        "That is not a valid address.",
+        "That address cannot be paid.",
+        "A seat cannot pay itself.",
+        "The payee is not on the allowlist."
+      ]
+    },
+    {
+      "name": "cancel_request",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "request_id",
+          "int"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "Only the delegate who filed the request can cancel it.",
+        "The request can no longer be cancelled.",
+        "No such request.",
+        "No such mandate."
+      ]
+    },
+    {
+      "name": "review",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "request_id",
+          "int"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "The request is not waiting for a review.",
+        "The request is stale. Call expire_request to close it.",
+        "Wait two minutes before asking again.",
+        "The mandate does not hold enough unreserved funds.",
+        "The amount is more than the seat's remaining budget.",
+        "No such request.",
+        "No such mandate.",
+        "The mandate is paused.",
+        "The mandate has expired."
+      ]
+    },
+    {
+      "name": "decide",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "request_id",
+          "int"
+        ],
+        [
+          "approve",
+          "bool"
+        ],
+        [
+          "note",
+          "str"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "Only the owner or the guardian can decide.",
+        "The request is not waiting for a decision.",
+        "The request is stale. Call expire_request to close it.",
+        "The mandate does not hold enough unreserved funds.",
+        "The amount is more than the seat's remaining budget.",
+        "No such request.",
+        "No such mandate.",
+        "The mandate is paused.",
+        "The mandate has expired."
+      ]
+    },
+    {
+      "name": "veto",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "request_id",
+          "int"
+        ],
+        [
+          "note",
+          "str"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "Only the owner or the guardian can veto.",
+        "There is no approval to veto.",
+        "No such request.",
+        "No such mandate."
+      ]
+    },
+    {
+      "name": "execute",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "request_id",
+          "int"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "The request is not approved.",
+        "The approval is still in its waiting time.",
+        "The approval is no longer payable. Call expire_request.",
+        "The seat has been revoked.",
+        "The payment is above the current per-payment limit.",
+        "The payee is no longer listed.",
+        "Too many payments inside the rolling window. Try again later.",
+        "The rolling window limit would be exceeded. Try again later.",
+        "No such request.",
+        "No such mandate.",
+        "The mandate is paused.",
+        "The mandate has expired."
+      ]
+    },
+    {
+      "name": "expire_request",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "request_id",
+          "int"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "The request is already closed.",
+        "Nothing has expired.",
+        "No such request.",
+        "No such mandate."
+      ]
+    },
+    {
+      "name": "challenge",
+      "kind": "write",
+      "payable": true,
+      "params": [
+        [
+          "request_id",
+          "int"
+        ],
+        [
+          "reason",
+          "str"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "Only an approval given by the AI can be challenged.",
+        "The approval has been challenged before.",
+        "The waiting time is over.",
+        "The agent, the owner and the guardian cannot challenge.",
+        "Send exactly the challenge bond.",
+        "Say in at least 12 characters why the approval is wrong.",
+        "No such request.",
+        "No such mandate."
+      ]
+    },
+    {
+      "name": "audit",
+      "kind": "write",
+      "payable": false,
+      "params": [
+        [
+          "request_id",
+          "int"
+        ]
+      ],
+      "returns": "None",
+      "errors": [
+        "The request is not under challenge.",
+        "The request is stale. Call expire_request to close it.",
+        "Wait two minutes before asking again.",
+        "No such request.",
+        "No such mandate."
+      ]
+    },
+    {
+      "name": "stats",
+      "kind": "view",
+      "payable": false,
+      "params": [],
+      "returns": "str",
+      "errors": []
+    },
+    {
+      "name": "solvency",
+      "kind": "view",
+      "payable": false,
+      "params": [],
+      "returns": "str",
+      "errors": []
+    },
+    {
+      "name": "get_mandate",
+      "kind": "view",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ]
+      ],
+      "returns": "str",
+      "errors": [
+        "No such mandate."
+      ]
+    },
+    {
+      "name": "list_mandates",
+      "kind": "view",
+      "payable": false,
+      "params": [
+        [
+          "offset",
+          "int"
+        ],
+        [
+          "limit",
+          "int"
+        ]
+      ],
+      "returns": "str",
+      "errors": []
+    },
+    {
+      "name": "mandates_of",
+      "kind": "view",
+      "payable": false,
+      "params": [
+        [
+          "who",
+          "str"
+        ],
+        [
+          "offset",
+          "int"
+        ],
+        [
+          "limit",
+          "int"
+        ]
+      ],
+      "returns": "str",
+      "errors": [
+        "That is not a valid address."
+      ]
+    },
+    {
+      "name": "get_request",
+      "kind": "view",
+      "payable": false,
+      "params": [
+        [
+          "request_id",
+          "int"
+        ]
+      ],
+      "returns": "str",
+      "errors": [
+        "No such request."
+      ]
+    },
+    {
+      "name": "list_requests",
+      "kind": "view",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "offset",
+          "int"
+        ],
+        [
+          "limit",
+          "int"
+        ]
+      ],
+      "returns": "str",
+      "errors": [
+        "No such mandate."
+      ]
+    },
+    {
+      "name": "allowance_of",
+      "kind": "view",
+      "payable": false,
+      "params": [
+        [
+          "mandate_id",
+          "int"
+        ],
+        [
+          "who",
+          "str"
+        ]
+      ],
+      "returns": "str",
+      "errors": [
+        "No such mandate.",
+        "That is not a valid address."
+      ]
+    }
+  ]
+}

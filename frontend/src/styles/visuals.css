@@ -1,0 +1,127 @@
+/* Visual components: spinners, consensus indicator, skeletons, tension gauge, lifecycle diagram. */
+
+/* ---- leash spinner: a bead running round a ring on its cord -------------------------------------------------------------- */
+
+.leash-spinner { display: inline-block; flex: none; }
+.leash-spinner svg { width: 100%; height: 100%; }
+.leash-spinner__orbit { transform-box: view-box; transform-origin: 50% 50%; animation: spin 1.05s linear infinite; }
+
+/* ---- orbit loader: three tilted rings turning around the mark ------------------------------------------------------------ */
+
+.orbit { display: inline-block; perspective: 640px; flex: none; }
+.orbit__scene { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d; animation: orbit-sway 7s ease-in-out infinite alternate; }
+.orbit__ring { position: absolute; inset: 4%; border-radius: 50%; border: 3px solid var(--line); transform-style: preserve-3d; }
+.orbit__ring i { position: absolute; top: -7px; left: calc(50% - 6px); width: 12px; height: 12px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px var(--bg); }
+.orbit__ring--a { animation: orbit-a 3.2s linear infinite; border-color: var(--accent); }
+.orbit__ring--a i { background: var(--accent); }
+.orbit__ring--b { inset: 14%; animation: orbit-b 4.4s linear infinite; }
+.orbit__ring--c { inset: 24%; animation: orbit-c 2.6s linear infinite reverse; border-color: var(--line-soft); }
+.orbit__mark { position: absolute; inset: 0; margin: auto; }
+@keyframes orbit-a { from { transform: rotateX(72deg) rotateZ(0deg); } to { transform: rotateX(72deg) rotateZ(360deg); } }
+@keyframes orbit-b { from { transform: rotateY(70deg) rotateZ(0deg); } to { transform: rotateY(70deg) rotateZ(360deg); } }
+@keyframes orbit-c { from { transform: rotateX(-38deg) rotateY(48deg) rotateZ(0deg); } to { transform: rotateX(-38deg) rotateY(48deg) rotateZ(360deg); } }
+@keyframes orbit-sway { from { transform: rotateX(-10deg) rotateY(-14deg); } to { transform: rotateX(12deg) rotateY(16deg); } }
+
+.page-loader { display: grid; place-items: center; min-height: 55vh; }
+
+/* ---- consensus indicator: five validators --------------------------------------------------------------------------------- */
+
+.consensus { overflow: visible; flex: none; }
+.consensus__halo { stroke: var(--line); stroke-width: 1; stroke-dasharray: 2 5; }
+.consensus__edge { stroke: var(--line); stroke-width: 1; opacity: 0.8; }
+.consensus__dot { fill: var(--surface-3); stroke: var(--ink-3); stroke-width: 1.5; transition: fill 0.3s, stroke 0.3s; }
+.consensus__ripple { fill: none; stroke: var(--accent); stroke-width: 1.5; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.consensus__mark { stroke: var(--ok); }
+
+.consensus--wallet .consensus__halo { stroke: var(--accent); stroke-dasharray: 4 5; animation: halo-turn 6s linear infinite; transform-origin: 50% 50%; }
+.consensus--wallet .consensus__dot { animation: dot-pulse 1.8s ease-in-out infinite; }
+
+.consensus--queue .consensus__dot { animation: dot-pulse 1.6s ease-in-out infinite; animation-delay: calc(var(--i) * 0.22s); }
+
+.consensus--propose .consensus__edge { stroke: var(--accent); stroke-dasharray: 3 4; animation: dash-run 0.8s linear infinite; }
+.consensus--propose .consensus__node:first-of-type .consensus__dot { fill: var(--accent); stroke: var(--accent); }
+.consensus--propose .consensus__node:first-of-type .consensus__ripple { animation: ripple 1.3s ease-out infinite; }
+
+.consensus--commit .consensus__dot { animation: dot-light 3s ease-in-out infinite; animation-delay: calc(var(--i) * 0.4s); }
+.consensus--commit .consensus__edge { stroke: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+
+.consensus--reveal .consensus__dot { fill: var(--accent); stroke: var(--accent); animation: dot-pulse 1.1s ease-in-out infinite; animation-delay: calc(var(--i) * 0.12s); }
+.consensus--reveal .consensus__edge { stroke: var(--accent); }
+
+.consensus--done .consensus__dot { fill: var(--ok); stroke: var(--ok); }
+.consensus--done .consensus__edge { stroke: var(--ok); opacity: 0.5; }
+.consensus--done .consensus__halo { stroke: var(--ok); }
+.consensus--failed .consensus__dot { fill: var(--bad); stroke: var(--bad); }
+.consensus--failed .consensus__edge, .consensus--failed .consensus__halo { stroke: var(--bad); opacity: 0.5; }
+.consensus--failed .consensus__mark { stroke: var(--bad); }
+
+@keyframes dot-pulse { 0%, 100% { fill: var(--surface-3); } 50% { fill: var(--accent); } }
+@keyframes dot-light { 0%, 18% { fill: var(--surface-3); stroke: var(--ink-3); } 32%, 100% { fill: var(--accent); stroke: var(--accent); } }
+@keyframes dash-run { to { stroke-dashoffset: -14; } }
+@keyframes ripple { from { opacity: 0.9; transform: scale(1); } to { opacity: 0; transform: scale(3.2); } }
+@keyframes halo-turn { to { transform: rotate(360deg); } }
+
+/* ---- skeleton ----------------------------------------------------------------------------------------------------------------- */
+
+.skeleton { display: inline-block; vertical-align: middle; background: linear-gradient(90deg, var(--surface-3) 25%, var(--line-soft) 50%, var(--surface-3) 75%); background-size: 220% 100%; animation: shimmer 1.4s linear infinite; }
+@keyframes shimmer { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+
+/* ---- tension gauge ------------------------------------------------------------------------------------------------------------ */
+
+.gauge { width: 100%; min-width: 0; }
+.gauge__svg { display: block; overflow: visible; max-width: 100%; }
+.gauge__cord { stroke: var(--accent); }
+.gauge__ring { stroke: var(--ink-2); }
+.gauge__bead { fill: var(--accent); }
+.gauge__svg--warn .gauge__cord { stroke: var(--warn-fill); }
+.gauge__svg--warn .gauge__bead { fill: var(--warn-fill); }
+.gauge__svg--bad .gauge__cord { stroke: var(--bad); }
+.gauge__svg--bad .gauge__bead { fill: var(--bad); }
+.gauge__legend { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.15rem; font-size: 0.8125rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.gauge__legend span:last-child { text-align: right; }
+
+/* ---- lifecycle diagram -------------------------------------------------------------------------------------------------------- */
+
+.lifecycle { display: block; width: 100%; min-width: 760px; height: auto; }
+.lc-edge path { stroke: var(--ink-3); stroke-width: 2; fill: none; transition: stroke 0.3s, stroke-width 0.3s; }
+.lc-edge text { font: 560 12.5px var(--font-sans); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+.lc-edge.is-on path { stroke: var(--accent); stroke-width: 3.6; }
+.lc-edge.is-on text { fill: var(--accent-text); font-weight: 720; }
+.lc-edge.is-rare path { stroke-dasharray: 5 6; }
+
+.lc-node { outline: none; }
+.lc-node rect { fill: var(--surface-2); stroke: var(--line); stroke-width: 1.6; transition: fill 0.3s, stroke 0.3s, stroke-width 0.3s; }
+.lc-node text { font: 700 14px var(--font-sans); fill: var(--ink); }
+.lc-node--ok rect { fill: var(--ok-soft); stroke: var(--ok); }
+.lc-node--warn rect { fill: var(--warn-soft); stroke: var(--warn); }
+.lc-node--bad rect { fill: var(--bad-soft); stroke: var(--bad); }
+.lc-node--accent rect { fill: var(--accent-soft); stroke: var(--accent); }
+.lc-node.is-exit rect { stroke-dasharray: 5 4; fill: transparent; }
+.lc-node.is-visited rect { stroke-width: 2.8; }
+.lc-node.is-current rect { stroke-width: 4; }
+.lc-node.is-current text { font-weight: 800; }
+.lc-node[role="button"] { cursor: pointer; }
+.lc-node[role="button"]:focus-visible rect { stroke: var(--focus); stroke-width: 3.5; }
+.lc-caption { font: 450 12px var(--font-sans) !important; fill: var(--ink-3) !important; }
+.lc-packet { fill: var(--accent); stroke: var(--surface); stroke-width: 3; filter: drop-shadow(0 0 6px var(--accent)); }
+
+.lc-explorer { display: grid; grid-template-columns: minmax(15rem, 20rem) minmax(0, 1fr); gap: var(--space-5); align-items: start; }
+.lc-explorer__list { display: grid; gap: 0.5rem; }
+.lc-pick { text-align: left; display: grid; gap: 0.2rem; padding: 0.75rem 0.9rem; border-radius: var(--r-m); border: 1px solid var(--line-soft); background: var(--surface); transition: border-color 0.15s, background-color 0.15s; }
+.lc-pick strong { font-size: var(--fs-s); }
+.lc-pick span { color: var(--ink-3); font-size: 0.8125rem; line-height: 1.4; }
+.lc-pick:hover { border-color: var(--ink-3); }
+.lc-pick.is-active { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 3px 0 0 var(--accent); }
+.lc-explorer__stage { overflow-x: auto; border: 1px solid var(--line-soft); border-radius: var(--r-m); background: var(--surface); padding: 0.5rem; }
+.lc-explorer__bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: var(--space-4) 0; }
+.lc-explorer__steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; counter-reset: step; }
+.lc-explorer__steps li { display: grid; grid-template-columns: 9.5rem 1fr; gap: 0.75rem; padding: 0.6rem 0.8rem; border-radius: var(--r-s); border-left: 3px solid var(--line); background: var(--surface-2); color: var(--ink-3); font-size: var(--fs-s); transition: border-color 0.3s, color 0.3s, background-color 0.3s; }
+.lc-explorer__steps li code { background: transparent; padding: 0; font-weight: 600; color: inherit; }
+.lc-explorer__steps li.is-done { border-left-color: var(--accent); color: var(--ink); background: var(--surface); }
+.lc-explorer__steps li.is-next { border-left-color: var(--ink-3); color: var(--ink-2); }
+@media (max-width: 920px) {
+  .lc-explorer { grid-template-columns: minmax(0, 1fr); }
+  .lc-explorer > * { min-width: 0; }
+  .lc-explorer__list { grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); }
+}
+@media (max-width: 560px) { .lc-explorer__steps li { grid-template-columns: 1fr; gap: 0.15rem; } }

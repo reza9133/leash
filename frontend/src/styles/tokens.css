@@ -1,0 +1,167 @@
+/* Design tokens. Three themes: light (fog), dim (semi-light slate) and dark (night).
+   Brand: safety orange on cool grey, the colours of lifeline gear. Verdict colours (ok / warn / bad)
+   are reserved for the three things the AI reviewer can say, so the brand colour never competes with them. */
+
+:root {
+  --font-sans: "Archivo Variable", "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Martian Mono Variable", "Martian Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --wide: 125%;
+  --semi-wide: 112%;
+
+  --fs-xs: 0.78rem;
+  --fs-s: 0.875rem;
+  --fs-m: 1rem;
+  --fs-l: 1.1875rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: clamp(1.75rem, 2.6vw, 2.25rem);
+  --fs-3xl: clamp(2.1rem, 4vw, 3.1rem);
+  --fs-display: clamp(2.7rem, 7.4vw, 6.2rem);
+
+  --r-s: 6px;
+  --r-m: 10px;
+  --r-l: 20px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+
+  --page-max: 1240px;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --header-h: 68px;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-spring: cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #edf0f4;
+  --bg-deep: #e2e7ed;
+  --surface: #ffffff;
+  --surface-2: #f5f7fa;
+  --surface-3: #eaeef3;
+  --line: #c3ccd7;
+  --line-soft: #dbe1e8;
+  --ink: #12161c;
+  --ink-2: #39434f;
+  --ink-3: #566373;
+  --ink-inverse: #f4f6f8;
+
+  --accent: #ff5a1f;
+  --accent-hover: #ff7240;
+  --accent-edge: #c93e0b;
+  --accent-text: #b13608;
+  --accent-soft: rgba(255, 90, 31, 0.12);
+  --on-accent: #12161c;
+
+  --ok: #0e7c58;
+  --ok-soft: rgba(14, 124, 88, 0.12);
+  --warn: #8f5b00;
+  --warn-fill: #f2b01e;
+  --warn-soft: rgba(242, 176, 30, 0.22);
+  --bad: #c21e45;
+  --bad-soft: rgba(194, 30, 69, 0.1);
+  --info: #2459c9;
+  --info-soft: rgba(36, 89, 201, 0.1);
+
+  --focus: #2459c9;
+  --code-bg: #101820;
+  --code-ink: #e5ebf2;
+  --code-dim: #8ea0b4;
+  --overlay: rgba(18, 22, 28, 0.55);
+  --hero-wash: radial-gradient(60% 70% at 78% 40%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 70%);
+  --grid-line: rgba(18, 22, 28, 0.055);
+  --shadow-pop: 0 18px 50px -18px rgba(18, 22, 28, 0.35);
+  --logo-ink: #12161c;
+}
+
+[data-theme="dim"] {
+  color-scheme: dark;
+  --bg: #262d38;
+  --bg-deep: #1f252e;
+  --surface: #323b48;
+  --surface-2: #2b333f;
+  --surface-3: #3a4452;
+  --line: #4a5565;
+  --line-soft: #3c4655;
+  --ink: #eef1f5;
+  --ink-2: #c9d1dc;
+  --ink-3: #9ca8b8;
+  --ink-inverse: #12161c;
+
+  --accent: #ff6a35;
+  --accent-hover: #ff8456;
+  --accent-edge: #c4470f;
+  --accent-text: #ff9a73;
+  --accent-soft: rgba(255, 106, 53, 0.16);
+  --on-accent: #14181f;
+
+  --ok: #54d6a6;
+  --ok-soft: rgba(84, 214, 166, 0.14);
+  --warn: #f7cb55;
+  --warn-fill: #f7cb55;
+  --warn-soft: rgba(247, 203, 85, 0.15);
+  --bad: #ff8097;
+  --bad-soft: rgba(255, 128, 151, 0.14);
+  --info: #86aaff;
+  --info-soft: rgba(134, 170, 255, 0.14);
+
+  --focus: #8fb0ff;
+  --code-bg: #1b2129;
+  --code-ink: #e5ebf2;
+  --code-dim: #8d9bad;
+  --overlay: rgba(10, 13, 18, 0.62);
+  --hero-wash: radial-gradient(60% 70% at 78% 40%, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 70%);
+  --grid-line: rgba(238, 241, 245, 0.05);
+  --shadow-pop: 0 18px 50px -18px rgba(0, 0, 0, 0.6);
+  --logo-ink: #f4f6f8;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b121a;
+  --bg-deep: #070c12;
+  --surface: #121b26;
+  --surface-2: #0f1721;
+  --surface-3: #182330;
+  --line: #2a3a4d;
+  --line-soft: #1e2b3a;
+  --ink: #f1f4f8;
+  --ink-2: #c3cdd9;
+  --ink-3: #8c9aad;
+  --ink-inverse: #0b121a;
+
+  --accent: #ff6a35;
+  --accent-hover: #ff8456;
+  --accent-edge: #bd4310;
+  --accent-text: #ff9a73;
+  --accent-soft: rgba(255, 106, 53, 0.16);
+  --on-accent: #12161c;
+
+  --ok: #54d6a6;
+  --ok-soft: rgba(84, 214, 166, 0.13);
+  --warn: #f7cb55;
+  --warn-fill: #f7cb55;
+  --warn-soft: rgba(247, 203, 85, 0.14);
+  --bad: #ff8097;
+  --bad-soft: rgba(255, 128, 151, 0.13);
+  --info: #86aaff;
+  --info-soft: rgba(134, 170, 255, 0.13);
+
+  --focus: #8fb0ff;
+  --code-bg: #070c12;
+  --code-ink: #e5ebf2;
+  --code-dim: #7f8da0;
+  --overlay: rgba(2, 5, 9, 0.7);
+  --hero-wash: radial-gradient(60% 70% at 78% 40%, rgba(255, 106, 53, 0.08), rgba(255, 106, 53, 0) 70%);
+  --grid-line: rgba(241, 244, 248, 0.045);
+  --shadow-pop: 0 18px 50px -18px rgba(0, 0, 0, 0.8);
+  --logo-ink: #f4f6f8;
+}
